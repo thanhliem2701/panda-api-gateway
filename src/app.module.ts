@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-// import { SideMenuModule } from './side_menu/side_menu.module';
-import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
-  imports: [ 
-  AuthModule
+  imports: [ConfigModule.forRoot({ isGlobal: true }),
+    AuthModule,
+    AdminModule
   ],
   controllers: [AppController],
   providers: [AppService],

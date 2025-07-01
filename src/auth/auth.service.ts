@@ -23,13 +23,12 @@ export class AuthService {
         const result = await lastValueFrom(this.auth_service.send("user_login", { email, pw }));
         return result;
     }
-
     // Verify Token
     async verifyToken(token: string, secret_code: string) {
         const result = await lastValueFrom(this.auth_service.send("verify_token", { token, secret_code }));
         return result;
     }
-
+    // Refresh Token
     async refreshToken(refreshToken: string, secret_code: string) {
         const result = await lastValueFrom(this.auth_service.send("user_refresh_token", { refreshToken, secret_code }));
         return result;

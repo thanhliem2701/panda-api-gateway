@@ -1,25 +1,25 @@
-import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { Module } from "@nestjs/common";
+import { AdminService } from "./admin.service";
+import { ClientsModule, Transport } from "@nestjs/microservices";
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AdminController } from "./admin.controller";
 
 @Module({
-  imports: [
+    imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     ClientsModule.registerAsync([
       {
-        name: 'AUTH_SERVICE',
+        name: 'ADMIN_SERVICE',
         imports: [ConfigModule],
         inject: [ConfigService],
         useFactory: (configService: ConfigService) => {
           const amqp_url = configService.get<string>('AMQP_URL') || '';
-          const auth_queue = configService.get<string>('AUTH_QUEUE') || '';
+          const admin_queue = configService.get<string>('ADMIN_QUEUE') || '';
           return {
             transport: Transport.RMQ,
             options: {
               urls: [amqp_url],
-              queue: auth_queue,
+              queue: admin_queue,
               queueOptions: { durable: true },
             },
           };
@@ -27,7 +27,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       },
     ]),
   ],
-  controllers: [AuthController],
-  providers: [AuthService],
+    controllers:[AdminController],
+    providers:[AdminService],
 })
-export class AuthModule { }
+export class AdminModule {}
