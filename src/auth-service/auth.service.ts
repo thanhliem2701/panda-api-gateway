@@ -5,12 +5,12 @@ import { lastValueFrom } from 'rxjs';
 @Injectable()
 export class AuthService {
     constructor(
-        @Inject("AUTH_SERVICE") private readonly auth_service: ClientProxy
+        @Inject("AUTH_SERVICE") private readonly authService: ClientProxy
     ) { }
 
     // Admin Sign In
     async adminSignIn(email: string, pw: string) {
-        const response = await lastValueFrom(this.auth_service.send("admin_login", { email, pw }));
+        const response = await lastValueFrom(this.authService.send("admin_login", { email, pw }));
         if (response.success === false) {
             throw new BadRequestException({ message: response.messages });
         }
@@ -19,7 +19,7 @@ export class AuthService {
     }
     // Verify Admin Token
     async verifyAdminToken(token: string) {
-        const response = await lastValueFrom(this.auth_service.send("verify_admin_token", { token }));
+        const response = await lastValueFrom(this.authService.send("verify_admin_token", { token }));
         if (response.success === false) {
             throw new BadRequestException({ message: response.messages });
         }
@@ -28,7 +28,7 @@ export class AuthService {
     }
     // User Sign In
     async userSignIn(email: string, pw: string) {
-        const response = await lastValueFrom(this.auth_service.send("user_login", { email, pw }));
+        const response = await lastValueFrom(this.authService.send("user_login", { email, pw }));
         if (response.success === false) {
             throw new BadRequestException({ message: response.messages });
         }
@@ -37,7 +37,7 @@ export class AuthService {
     }
     // Verify Token
     async verifyToken(token: string, secret_code: string) {
-        const response = await lastValueFrom(this.auth_service.send("verify_token", { token, secret_code }));
+        const response = await lastValueFrom(this.authService.send("verify_token", { token, secret_code }));
         if (response.success === false) {
             throw new BadRequestException({ message: response.messages });
         }
@@ -46,7 +46,7 @@ export class AuthService {
     }
     // Refresh Token
     async refreshToken(refreshToken: string, secret_code: string) {
-        const response = await lastValueFrom(this.auth_service.send("user_refresh_token", { refreshToken, secret_code }));
+        const response = await lastValueFrom(this.authService.send("user_refresh_token", { refreshToken, secret_code }));
         if (response.success === false) {
             throw new BadRequestException({ message: response.messages });
         }

@@ -3,10 +3,15 @@ import { AdminService } from "./admin.service";
 import { ClientsModule, Transport } from "@nestjs/microservices";
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AdminController } from "./admin.controller";
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-    imports: [
+  imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    JwtModule.register({
+      secret: process.env.SECRET_KEY || '',
+      signOptions: { expiresIn: '1d' },
+    }),
     ClientsModule.registerAsync([
       {
         name: 'ADMIN_SERVICE',
@@ -27,7 +32,7 @@ import { AdminController } from "./admin.controller";
       },
     ]),
   ],
-    controllers:[AdminController],
-    providers:[AdminService],
+  controllers: [AdminController],
+  providers: [AdminService],
 })
-export class AdminModule {}
+export class AdminModule { }

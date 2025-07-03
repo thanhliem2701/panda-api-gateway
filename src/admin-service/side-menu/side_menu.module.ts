@@ -1,17 +1,17 @@
 import { Module } from "@nestjs/common";
-import { UserController } from "./user.controller";
-import { UserService } from "./user.service";
-import { ConfigModule, ConfigService } from "@nestjs/config";
+import { SideMenuController } from "./side_menu.controller";
+import { SideMenuService } from "./side_menu.service";
 import { ClientsModule, Transport } from "@nestjs/microservices";
-import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import { JwtModule } from "@nestjs/jwt";
 
 @Module({
     imports: [
-        ConfigModule.forRoot({ isGlobal: true }),
         JwtModule.register({
             secret: process.env.SECRET_KEY || '',
             signOptions: { expiresIn: '1d' },
         }),
+        ConfigModule.forRoot({ isGlobal: true }),
         ClientsModule.registerAsync([
             {
                 name: 'ADMIN_SERVICE',
@@ -26,13 +26,13 @@ import { JwtModule } from '@nestjs/jwt';
                             urls: [amqp_url],
                             queue: admin_queue,
                             queueOptions: { durable: true },
-                        },
-                    };
+                        }
+                    }
                 }
             },
-        ])
+        ]),
     ],
-    controllers: [UserController],
-    providers: [UserService]
+    providers: [SideMenuService],
+    controllers: [SideMenuController]
 })
-export class UserModule { }
+export class SideMenuModule { }
