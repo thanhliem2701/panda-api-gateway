@@ -7,7 +7,6 @@ export class SideMenuService {
     constructor(
         @Inject('ADMIN_SERVICE') private readonly sideMenuService: ClientProxy
     ) { }
-
     //Get all menus
     async getAllMenus() {
         const response = await lastValueFrom(this.sideMenuService.send("get_all_menus", {}))

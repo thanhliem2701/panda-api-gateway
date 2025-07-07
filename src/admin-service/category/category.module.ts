@@ -1,10 +1,9 @@
 import { Module } from "@nestjs/common";
-import { SideMenuController } from "./side_menu.controller";
-import { SideMenuService } from "./side_menu.service";
-import { ClientsModule, Transport } from "@nestjs/microservices";
+import { CategoryService } from "./category.service";
+import { CategoryController } from "./category.controller";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { ClientsModule, Transport } from "@nestjs/microservices";
 import { JwtModule } from "@nestjs/jwt";
-import { S3Service } from "src/common/aws/s3.service";
 
 @Module({
     imports: [
@@ -26,14 +25,14 @@ import { S3Service } from "src/common/aws/s3.service";
                         options: {
                             urls: [amqp_url],
                             queue: admin_queue,
-                            queueOptions: { durable: true },
+                            queueOptions: { durable: true }
                         }
                     }
                 }
             },
-        ]),
+        ])
     ],
-    providers: [SideMenuService,S3Service],
-    controllers: [SideMenuController]
+    controllers: [CategoryController],
+    providers: [CategoryService]
 })
-export class SideMenuModule { }
+export class CategoryModule { }

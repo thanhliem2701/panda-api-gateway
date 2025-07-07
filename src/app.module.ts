@@ -6,15 +6,22 @@ import { ConfigModule } from '@nestjs/config';
 import { AdminModule } from './admin-service/admin/admin.module';
 import { UserModule } from './admin-service/user/user.module';
 import { SideMenuModule } from './admin-service/side-menu/side_menu.module';
+import { CategoryModule } from './admin-service/category/category.module';
+import { MulterModule } from '@nestjs/platform-express';
+import { S3Service } from './common/aws/s3.service';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true}),
+    MulterModule.register({
+      limits: { fileSize: 5 * 1024 * 1024 },
+    }),
     AuthModule,
     AdminModule,
     UserModule,
     SideMenuModule,
+    CategoryModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,S3Service],
 })
 export class AppModule { }
