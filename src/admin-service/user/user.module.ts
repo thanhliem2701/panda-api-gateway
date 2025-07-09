@@ -1,38 +1,18 @@
 import { Module } from "@nestjs/common";
 import { UserController } from "./user.controller";
 import { UserService } from "./user.service";
-import { ConfigModule, ConfigService } from "@nestjs/config";
-import { ClientsModule, Transport } from "@nestjs/microservices";
-import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule } from "@nestjs/config";
+import { registerJwtModule } from "src/common/utils/jwt-config";
+import { createClientModule } from "src/common/utils/register-client.module";
+import { ErrorHandleService } from "src/common/utils/error-handling";
 
 @Module({
     imports: [
         ConfigModule.forRoot({ isGlobal: true }),
-        JwtModule.register({
-            secret: process.env.SECRET_KEY || '',
-            signOptions: { expiresIn: '1d' },
-        }),
-        ClientsModule.registerAsync([
-            {
-                name: 'ADMIN_SERVICE',
-                imports: [ConfigModule],
-                inject: [ConfigService],
-                useFactory: (configService: ConfigService) => {
-                    const amqp_url = configService.get<string>('AMQP_URL') || '';
-                    const admin_queue = configService.get<string>('ADMIN_QUEUE') || '';
-                    return {
-                        transport: Transport.RMQ,
-                        options: {
-                            urls: [amqp_url],
-                            queue: admin_queue,
-                            queueOptions: { durable: true },
-                        },
-                    };
-                }
-            },
-        ])
+        registerJwtModule(),
+        createClientModule('ADMIN_SERVICE', 'AMQP_URL', 'ADMIN_QUEUE'),
     ],
     controllers: [UserController],
-    providers: [UserService]
+    providers: [UserService, ErrorHandleService]
 })
 export class UserModule { }

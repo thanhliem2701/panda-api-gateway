@@ -9,6 +9,8 @@ import { SideMenuModule } from './admin-service/side-menu/side_menu.module';
 import { CategoryModule } from './admin-service/category/category.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { S3Service } from './common/aws/s3.service';
+import { TopBannerModule } from './admin-service/top-banner/top_banner.module';
+import { CategoryBannerModule } from './admin-service/category-banner/category_banner.module';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true}),
@@ -20,6 +22,8 @@ import { S3Service } from './common/aws/s3.service';
     UserModule,
     SideMenuModule,
     CategoryModule,
+    TopBannerModule,
+    CategoryBannerModule,
   ],
   controllers: [AppController],
   providers: [AppService,S3Service],

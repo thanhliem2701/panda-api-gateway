@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
-import { SideMenuController } from "./side_menu.controller";
-import { SideMenuService } from "./side_menu.service";
+import { TopBannerController } from "./top_banner.controller";
+import { TopBannerService } from "./top_banner.service";
 import { ConfigModule } from "@nestjs/config";
 import { S3Service } from "src/common/aws/s3.service";
 import { registerJwtModule } from "src/common/utils/jwt-config";
@@ -9,11 +9,11 @@ import { ErrorHandleService } from "src/common/utils/error-handling";
 
 @Module({
     imports: [
-        ConfigModule.forRoot({ isGlobal: true }),
         registerJwtModule(),
         createClientModule('ADMIN_SERVICE', 'AMQP_URL', 'ADMIN_QUEUE'),
+        ConfigModule.forRoot({ isGlobal: true }),
     ],
-    providers: [SideMenuService, S3Service, ErrorHandleService],
-    controllers: [SideMenuController]
+    controllers: [TopBannerController],
+    providers: [TopBannerService, S3Service, ErrorHandleService],
 })
-export class SideMenuModule { }
+export class TopBannerModule { }

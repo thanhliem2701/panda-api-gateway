@@ -23,11 +23,14 @@ export class SideMenuController {
     @Post('/create')
     @UseInterceptors(FileInterceptor('file'))
     async createSideMenu(@UploadedFile() file: Express.Multer.File, @Body() menu_info: any) {
-        let imgurl: string | null = null;
+        let payload: any;
         if (file) {
-            imgurl = await this.s3Service.uploadFile(file);
+            //let imgurl: string | null = null;
+            const imgurl = await this.s3Service.uploadFile(file);
+            payload = { ...menu_info, imgurl }
+        } else {
+            payload = { ...menu_info }
         }
-        const payload = { ...menu_info, imgurl }
         return this.sideMenuService.createSideMenu(payload);
     }
 
@@ -35,12 +38,13 @@ export class SideMenuController {
     @Put('/update')
     @UseInterceptors(FileInterceptor('file'))
     async updateSideMenu(@UploadedFile() file: Express.Multer.File, @Body() menu_info: any) {
-        let imgurl: string | null = null;
+        let payload: any;
         if (file) {
-            imgurl = await this.s3Service.uploadFile(file);
+            const imgurl = await this.s3Service.uploadFile(file);
+            payload = { ...menu_info, imgurl }
+        } else {
+            payload = { ...menu_info }
         }
-        const payload = { ...menu_info, imgurl }
         return this.sideMenuService.updateSideMenu(payload);
     }
-
 }

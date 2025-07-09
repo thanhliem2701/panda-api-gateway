@@ -17,7 +17,7 @@ export class JwtAuthGuard implements CanActivate {
     const authHeader = request.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw new UnauthorizedException('Missing or invalid token');
+      throw new UnauthorizedException({ statusCode: 401, message: 'Missing or invalid token' });
     }
 
     const token = authHeader.split(' ')[1];
@@ -26,12 +26,12 @@ export class JwtAuthGuard implements CanActivate {
       const decoded = await this.jwtService.verifyAsync(token);
       const rolesStr = this.configService.get<string>('ALLOWED_ROLES') || '';
       const allowedRoles = rolesStr.split(',').map(r => r.trim().toUpperCase());
-      if (!decoded.data.role || !allowedRoles.includes(decoded.data.role) ) {
-        throw new UnauthorizedException('You are not authorized to access this resource');
+      if (!decoded.data.role || !allowedRoles.includes(decoded.data.role)) {
+        throw new UnauthorizedException({ statusCode: 401, message: 'You are not authorized to access this resource' });
       }
       return true;
     } catch (err) {
-      throw new UnauthorizedException('You are not authorized to access this resource');
+      throw new UnauthorizedException({ statusCode: 401, message: 'You are not authorized to access this resource' });
     }
   }
 }
